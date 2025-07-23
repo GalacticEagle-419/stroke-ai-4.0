@@ -2,129 +2,203 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Stroke AI Equity Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stroke Equity Project</title>
 
-    <!-- Fonts & Bootstrap -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+    <!-- Custom CSS -->
     <style>
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #fefefc;
-        color: #1a1a1a;
-        padding-top: 80px;
+      :root {
+        --neon-green: #39ff14;
+        --neon-blue: #00ffff;
+        --bg-dark: #0a0a0a;
+        --text-main: #e0e0e0;
+        --font-main: 'Orbitron', sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        height: 100%;
+        font-family: var(--font-main);
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        overflow-x: hidden;
       }
 
       .navbar {
-        background-color: #0f3c49;
+        background-color: rgba(10, 10, 10, 0.95);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
-      .navbar-brand, .nav-link {
-        color: #ffffff !important;
+      .navbar a {
+        color: var(--neon-blue);
+        text-decoration: none;
+        margin: 0 1rem;
         font-weight: 600;
+        transition: color 0.3s;
       }
 
-      .navbar-brand:hover, .nav-link:hover {
-        color: #f28e2c !important;
+      .navbar a:hover {
+        color: var(--neon-green);
       }
 
-      .hero-title {
-        font-size: 2.75rem;
-        font-weight: 800;
-        color: #0f3c49;
+      .container {
+        padding: 4rem 2rem;
+        position: relative;
+        z-index: 1;
       }
 
-      .highlight {
-        background-color: #f28e2c;
-        padding: 4px 10px;
-        border-radius: 6px;
-        color: white;
-        font-weight: 600;
+      h1.page-header {
+        color: var(--neon-green);
+        font-size: 3rem;
+        margin-bottom: 2rem;
       }
 
-      .stats-section h2 {
+      .portfolio-item {
+        margin: 2rem 0;
+        text-align: center;
+      }
+
+      .portfolio-item h2 {
+        color: var(--neon-blue);
         font-size: 2.5rem;
-        font-weight: 700;
-        color: #f28e2c;
+      }
+
+      hr {
+        border-color: var(--neon-green);
+        margin: 3rem 0;
       }
 
       footer {
-        background-color: #0f3c49;
-        color: #ffffff;
-        padding: 20px 0;
         text-align: center;
-        margin-top: 80px;
+        padding: 2rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      /* Dynamic Background Animation */
+      .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        background: #0a0a0a;
       }
     </style>
   </head>
-
   <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Stroke Equity Project</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="#model">Model</a></li>
-            <li class="nav-item"><a class="nav-link" href="#partners">Partners</a></li>
-            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-          </ul>
-        </div>
+    <canvas id="bgCanvas" class="background"></canvas>
+
+    <nav class="navbar">
+      <a href="#">Stroke Equity Project</a>
+      <div>
+        <a href="#about">About</a>
+        <a href="#model">Model</a>
+        <a href="#partners">Partners</a>
+        <a href="#contact">Contact</a>
       </div>
     </nav>
 
-    <!-- Main Container -->
-    <div class="container" id="about">
-      <div class="row mb-5">
-        <div class="col-lg-12 text-center">
-          <h1 class="hero-title">Stroke Subtype Classification</h1>
-          <p class="mt-4 fs-5">
-            We are developing an <span class="highlight">open-source AI tool</span> that helps clinicians distinguish between ischemic and hemorrhagic stroke using only early clinical information—before imaging is available.
-          </p>
-          <p class="fs-5">
-            The goal is to support decision-making in <strong>low-resource settings</strong> where CT scans are not accessible, reducing the risk of fatal treatment errors.
-            Built on real-world hospital data and designed for global deployment, this tool aims to improve stroke care where it's needed most.
-          </p>
-        </div>
-      </div>
+    <div class="container">
+      <h1 class="page-header">Stroke Subtype Classification</h1>
+      <p>
+        We are developing an open-source AI tool that helps clinicians distinguish between ischemic and hemorrhagic stroke using only early clinical information—before imaging is available. The goal is to support decision-making in low-resource settings where CT scans are not accessible, reducing the risk of fatal treatment errors. Built on real-world hospital data and designed for global deployment, this tool aims to improve stroke care where it's needed most.
+      </p>
 
-      <!-- Stats Section -->
-      <div class="row stats-section text-center">
-        <div class="col-md-4 mb-4">
+      <div class="row">
+        <div class="portfolio-item">
           <h2>40%</h2>
-          <p class="fs-5">of stroke patients in Sub-Saharan Africa die within a month</p>
+          <p>Of stroke patients in Sub-Saharan Africa die within a month</p>
         </div>
-        <div class="col-md-4 mb-4">
+
+        <div class="portfolio-item">
           <h2>&lt;1</h2>
-          <p class="fs-5">CT scanner per 1M people in many Sub-Saharan regions</p>
+          <p>CT Scanner per 1,000,000 inhabitants in many regions of Sub-Saharan Africa</p>
         </div>
-        <div class="col-md-4 mb-4">
+
+        <div class="portfolio-item">
           <h2>82%</h2>
-          <p class="fs-5">Accuracy of the Siriraj Stroke Score without imaging</p>
+          <p>Accuracy of the Siriraj Stroke Score, the leading alternative to radiology for subtype classification</p>
         </div>
       </div>
 
-      <hr class="my-5" />
+      <hr />
+
+      <footer>
+        <p>Copyright &copy; Shiven Das <span id="getCurrentDate"></span></p>
+      </footer>
     </div>
 
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <p>&copy; Shiven Das <span id="year"></span> – Stroke Equity Project</p>
-      </div>
-    </footer>
-
-    <!-- JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
+      var dt = new Date();
+      document.getElementById('getCurrentDate').innerHTML = dt.getFullYear();
+
+      // Dynamic dot background animation
+      const canvas = document.getElementById('bgCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const dots = [];
+      for (let i = 0; i < 100; i++) {
+        dots.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.7,
+          vy: (Math.random() - 0.5) * 0.7,
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < dots.length; i++) {
+          const dot = dots[i];
+          dot.x += dot.vx;
+          dot.y += dot.vy;
+
+          if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
+          if (dot.y < 0 || dot.y > canvas.height) dot.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(dot.x, dot.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = i % 2 === 0 ? 'var(--neon-green)' : 'var(--neon-blue)';
+          ctx.fill();
+
+          for (let j = i + 1; j < dots.length; j++) {
+            const dx = dots[i].x - dots[j].x;
+            const dy = dots[i].y - dots[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 100) {
+              ctx.beginPath();
+              ctx.moveTo(dots[i].x, dots[i].y);
+              ctx.lineTo(dots[j].x, dots[j].y);
+              ctx.strokeStyle = 'rgba(57, 255, 20, 0.1)';
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
     </script>
   </body>
 </html>
