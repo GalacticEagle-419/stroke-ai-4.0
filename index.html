@@ -1,175 +1,1008 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stroke Equity Project</title>
-
-    <!-- Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
-
-    <!-- Vanta Background Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.dots.min.js"></script>
-
-    <style>
-      :root {
-        --neon-green: #004a14;  /* too dark */
-        --neon-blue: #00194a;   /* too muted */
-        --bg-dark: #ffece3;     /* light background? */
-        --text-main: #211800;
-        --font-main: 'Inter', sans-serif;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html, body {
-        height: 100%;
-        font-family: var(--font-main);
-        background-color: var(--bg-dark);
-        color: var(--text-main);
-        overflow-x: hidden;
-      }
-
-      #background {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        top: 0;
-        left: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stroke Equity Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --oxford-blue: #14213d;
+      --indian-red: #d44d5c;
+      --sage: #b1ae91;
+      --ebony: #595a4a;
+      --blue-ncs: #2589bd;
       
+      --bg-dark: var(--oxford-blue);
+      --text-light: #ffffff;
+      --accent-primary: var(--indian-red);
+      --accent-secondary: var(--blue-ncs);
+      --highlight: var(--sage);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      padding-top: 80px; /* Space for fixed navbar */
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(20, 33, 61, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      border-bottom: 2px solid var(--indian-red);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--sage);
+    }
+    
+    .logo i {
+      color: var(--indian-red);
+      margin-right: 10px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 8px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-link:hover {
+      color: var(--sage);
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--indian-red);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .classifier-btn {
+      background: linear-gradient(135deg, var(--indian-red), var(--blue-ncs));
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212, 77, 92, 0.4);
+    }
+    
+    .classifier-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(212, 77, 92, 0.6);
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      transition: opacity 1s ease, transform 1s ease;
+      opacity: 0;
+      transform: translateY(50px);
+      position: relative;
+    }
+
+    section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      opacity: 0.7;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h1, h2 {
+      font-weight: 800;
+      margin-bottom: 2rem;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      color: var(--accent-primary);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+      font-size: 4.5rem;
+      color: var(--accent-secondary);
+      margin: 1.5rem 0;
+    }
+
+    p {
+      font-size: 1.5rem;
+      line-height: 1.8;
+      max-width: 800px;
+      color: var(--text-light);
+    }
+
+    .highlight {
+      color: var(--highlight);
+      font-weight: 600;
+    }
+
+    .stat-container {
+      background: rgba(37, 137, 189, 0.1);
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid rgba(37, 137, 189, 0.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Side-by-side time statistics */
+    .time-stats-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .time-stat {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      background: rgba(37, 137, 189, 0.1);
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid rgba(37, 137, 189, 0.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .solution-section {
+      background: linear-gradient(135deg, rgba(20, 33, 61, 0.9), rgba(20, 33, 61, 0.95));
+      border-top: 4px solid var(--accent-primary);
+    }
+
+    .solution-section h1 {
+      color: var(--highlight);
+    }
+    
+    /* Stroke Classifier Form Styles */
+    .classifier-section {
+      background: linear-gradient(135deg, rgba(89, 90, 74, 0.15), rgba(20, 33, 61, 0.95));
+      padding: 3rem 2rem;
+    }
+    
+    .classifier-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: left;
+      background: rgba(20, 33, 61, 0.8);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      border: 1px solid var(--blue-ncs);
+    }
+    
+    .classifier-title {
+      font-size: 2.8rem;
+      color: var(--sage);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 20px;
+    }
+    
+    .classifier-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--indian-red), var(--blue-ncs));
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--sage);
+      font-size: 1.1rem;
+    }
+    
+    select, input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 2px solid var(--blue-ncs);
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--indian-red);
+      box-shadow: 0 0 0 3px rgba(212, 77, 92, 0.3);
+    }
+    
+    option {
+      background-color: var(--oxford-blue);
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, var(--indian-red), var(--blue-ncs));
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: block;
+      margin: 2rem auto 0;
+      width: 200px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(212, 77, 92, 0.4);
+    }
+    
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+    
+    .result-container {
+      margin-top: 2.5rem;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      display: none;
+      background: rgba(0,0,0,0.2);
+      border: 2px solid transparent;
+      transition: all 0.5s ease;
+    }
+    
+    .result-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      color: var(--sage);
+    }
+    
+    .result-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 1rem 0;
+    }
+    
+    .ischemic {
+      color: var(--blue-ncs);
+      border-color: var(--blue-ncs);
+    }
+    
+    .hemorrhagic {
+      color: var(--indian-red);
+      border-color: var(--indian-red);
+    }
+    
+    .probability {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      color: var(--sage);
+    }
+    
+    .disclaimer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* About Section */
+    .about-section {
+      background: linear-gradient(135deg, rgba(89, 90, 74, 0.2), rgba(20, 33, 61, 0.9));
+      padding: 5rem 2rem;
+    }
+    
+    .about-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .about-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 3rem;
+      text-align: left;
+    }
+    
+    .about-text {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .about-image {
+      flex: 1;
+      min-width: 300px;
+      background: linear-gradient(135deg, var(--blue-ncs), var(--indian-red));
+      border-radius: 16px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      color: white;
+    }
+    
+    .about-title {
+      font-size: 2.8rem;
+      color: var(--sage);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 20px;
+    }
+    
+    .about-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--indian-red), var(--blue-ncs));
+    }
+    
+    /* Contact Section */
+    .contact-section {
+      background: linear-gradient(135deg, rgba(20, 33, 61, 0.9), rgba(89, 90, 74, 0.15));
+      padding: 5rem 2rem;
+    }
+    
+    .contact-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .contact-title {
+      font-size: 2.8rem;
+      color: var(--sage);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 20px;
+    }
+    
+    .contact-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--indian-red), var(--blue-ncs));
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    
+    .contact-card {
+      background: rgba(37, 137, 189, 0.15);
+      border-radius: 16px;
+      padding: 2rem;
+      min-width: 250px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(37, 137, 189, 0.3);
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
+    
+    .contact-icon {
+      font-size: 3rem;
+      color: var(--sage);
+      margin-bottom: 1.5rem;
+    }
+    
+    .contact-label {
+      font-size: 1.2rem;
+      color: var(--highlight);
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-value {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    
+    /* Scroll to top button */
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--indian-red), var(--blue-ncs));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 999;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    
+    .scroll-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .scroll-top:hover {
+      transform: translateY(-5px);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
       .navbar {
-        background-color: var(--bg-dark);
-        padding: 1rem 2rem;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .navbar a {
-        color: var(--neon-blue);
-        text-decoration: none;
-        margin: 0 1rem;
-        font-weight: 600;
-        transition: color 0.3s;
-      }
-
-      .navbar a:hover {
-        color: var(--neon-green);
-      }
-
-      .container {
-        padding: 4rem 2rem;
-        position: relative;
-        z-index: 1;
-      }
-
-      h1.page-header {
-        color: var(--neon-green);
-        font-size: 3rem;
-        margin-bottom: 2rem;
-      }
-
-      .portfolio-item {
-        flex: 1;
-        min-width: 250px;
-        text-align: center;
-      }
-
-      .portfolio-item h2 {
-        color: var(--neon-blue);
-        font-size: 4rem;
-      }
-
-      .row {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 2rem;
+        flex-direction: column;
+        padding: 15px;
       }
       
-      hr {
-        border-color: var(--neon-green);
-        margin: 3rem 0;
+      .nav-links {
+        margin: 15px 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
       }
-
-      footer {
-        text-align: center;
-        padding: 2rem;
-        font-size: 0.9rem;
-        color: var(--text-main);
+      
+      h1 {
+        font-size: 2.8rem;
       }
-    </style>
-  </head>
-  <body>
-    <div id="background"></div>
-
-    <nav class="navbar">
-      <a href="#">Stroke Equity Project</a>
-      <div>
-        <a href="#about">About</a>
-        <a href="#model">Model</a>
-        <a href="#partners">Partners</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </nav>
-
-    <div class="container">
-      <h1 class="page-header">Stroke Subtype Classification</h1>
-      <p>
-        We are developing an open-source AI tool that helps clinicians distinguish between ischemic and hemorrhagic stroke using only early clinical information—before imaging is available. The goal is to support decision-making in low-resource settings where CT scans are not accessible, reducing the risk of fatal treatment errors. Built on real-world hospital data and designed for global deployment, this tool aims to improve stroke care where it's needed most.
-      </p>
-
-      <div class="row">
-        <div class="portfolio-item">
-          <h2>40%</h2>
-          <p>Of stroke patients in Sub-Saharan Africa die within a month</p>
-        </div>
-        <div class="portfolio-item">
-          <h2>&lt;1</h2>
-          <p>CT Scanner per 1,000,000 inhabitants in many regions of Sub-Saharan Africa</p>
-        </div>
-        <div class="portfolio-item">
-          <h2>82%</h2>
-          <p>Accuracy of the Siriraj Stroke Score, the leading alternative to radiology for subtype classification</p>
-        </div>
-      </div>
-
-      <hr />
-
-      <footer>
-        <p>Copyright &copy; Shiven Das <span id="getCurrentDate"></span></p>
-      </footer>
+      
+      h2 {
+        font-size: 3.5rem;
+      }
+      
+      p {
+        font-size: 1.3rem;
+      }
+      
+      .classifier-title, .about-title, .contact-title {
+        font-size: 2.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-brain"></i>
+      <span>Stroke Equity Project</span>
     </div>
+    <div class="nav-links">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <button class="classifier-btn" onclick="scrollToClassifier()">
+      <i class="fas fa-stethoscope"></i> Try Classifier
+    </button>
+  </nav>
+  
+  <!-- Scroll to top button -->
+  <div class="scroll-top" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+  </div>
 
-    <script>
-      document.getElementById('getCurrentDate').textContent = new Date().getFullYear();
+  <section id="crisis">
+    <div class="stat-container">
+      <h1>A Crisis of Access</h1>
+      <p>In regions without imaging tools, a stroke diagnosis often comes too late. We're <span class="highlight">changing that.</span></p>
+    </div>
+  </section>
 
-      VANTA.DOTS({
-        el: "#background",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        scale: 1.0,
-        scaleMobile: 1.0,
-        color: 0x00ffff, // neon blue
-        color2: 0x39ff14, // neon green
-        backgroundColor: 0x0a0a0a,
-        size: 1.7,
-        spacing: 50.0,
-        showLines: true
+  <section id="statistics">
+    <div class="stat-container">
+      <h2>40%</h2>
+      <p>Of stroke patients in Sub-Saharan Africa <span class="highlight">die within a month.</span></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="stat-container">
+      <h2>0.32</h2>
+      <p>CT scanners per million people in low-income countries.<br> <span class="highlight">(WHO Global Atlas of Medical Devices)</span></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="stat-container">
+      <h2>82%</h2>
+      <p>Accuracy of the Siriraj Stroke Score – the best alternative to imaging for classification.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="stat-container">
+      <h2>12 Million</h2>
+      <p>New stroke cases each year worldwide.<br> <span class="highlight">(World Stroke Organization)</span></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="stat-container">
+      <h2>160 Million</h2>
+      <p>Years of healthy life lost annually due to stroke.<br> <span class="highlight">(IHME Global Burden of Disease)</span></p>
+    </div>
+  </section>
+
+  <!-- Side-by-side time statistics -->
+  <section id="time-stats">
+    <div class="time-stats-container">
+      <div class="time-stat">
+        <h2>4 Hours</h2>
+        <p>The window for stroke treatment after symptom onset.<br> <span class="highlight">Every second counts.</span></p>
+      </div>
+      
+      <div class="time-stat">
+        <h2>2.5 Hours</h2>
+        <p>Median travel time to a medical center in Sub-Saharan Africa.<br> <span class="highlight">(Lancet Global Health, 2019)</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="solution" class="solution-section">
+    <div>
+      <h1>We're Building the Solution</h1>
+      <p>AI tools that classify stroke subtypes without imaging. <span class="highlight">Free. Open-source.</span> Built for places that need it most.</p>
+    </div>
+  </section>
+  
+  <!-- Stroke Classifier Form Section -->
+  <section id="classifier" class="classifier-section">
+    <div class="classifier-container">
+      <h2 class="classifier-title">Stroke Classification Tool</h2>
+      <p style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem;">
+        This AI-powered tool helps classify stroke subtypes without imaging technology.<br>
+        Enter patient information below to get a prediction.
+      </p>
+      
+      <form id="strokeForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="consciousness">Consciousness Level:</label>
+            <select id="consciousness" required>
+              <option value="">Select level</option>
+              <option value="0">Alert</option>
+              <option value="1">Drowsy</option>
+              <option value="2">Coma</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="sex">Sex:</label>
+            <select id="sex" required>
+              <option value="">Select sex</option>
+              <option value="1">Male</option>
+              <option value="0">Female</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="age">Age (years):</label>
+            <input type="number" id="age" min="18" max="120" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="atrialFibrillation">Atrial Fibrillation:</label>
+            <select id="atrialFibrillation" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="bloodPressure">Systolic Blood Pressure (mmHg):</label>
+            <input type="number" id="bloodPressure" min="70" max="250" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="faceDeficit">Facial Deficit:</label>
+            <select id="faceDeficit" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="armDeficit">Arm/Hand Deficit:</label>
+            <select id="armDeficit" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="legDeficit">Leg/Foot Deficit:</label>
+            <select id="legDeficit" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="dysphasia">Dysphasia:</label>
+            <select id="dysphasia" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="hemianopia">Hemianopia:</label>
+            <select id="hemianopia" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="visuospatial">Visuospatial Disorder:</label>
+            <select id="visuospatial" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="brainstemSigns">Brainstem/Cerebellar Signs:</label>
+            <select id="brainstemSigns" required>
+              <option value="">Select</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+        </div>
+        
+        <button type="button" class="submit-btn" onclick="predictStroke()">
+          <i class="fas fa-bolt"></i> Predict Stroke Type
+        </button>
+      </form>
+      
+      <div id="resultContainer" class="result-container">
+        <h3 class="result-title">Stroke Prediction Result</h3>
+        <div id="resultValue" class="result-value">Loading prediction...</div>
+        <div id="probability" class="probability">Probability: Calculating...</div>
+      </div>
+      
+      <div class="disclaimer">
+        Note: This tool provides a preliminary assessment based on the Siriraj Stroke Score algorithm. 
+        It is not a substitute for professional medical diagnosis. Always consult with a healthcare provider for accurate diagnosis and treatment.
+      </div>
+    </div>
+  </section>
+  
+  <!-- About Section -->
+  <section id="about" class="about-section">
+    <div class="about-container">
+      <h2 class="about-title">About Our Project</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>Filler.</p>
+          
+          <p>Filler.</p>
+          
+          <p>Filler.</p>
+          
+          <p>Filler.</p>
+        </div>
+        
+        <div class="about-image">
+          <i class="fas fa-globe-africa"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section id="contact" class="contact-section">
+    <div class="contact-container">
+      <h2 class="contact-title">Contact Us</h2>
+      <p>Reach out to our team for collaborations, technical support, or media inquiries.</p>
+      
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value">filler</div>
+        </div>
+        
+        <div class="contact-card">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-value">filer</div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Navigation and scrolling functionality
+    function scrollToClassifier() {
+      document.getElementById('classifier').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center'
       });
-    </script>
-  </body>
+    }
+    
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+    
+    // Show/hide scroll to top button
+    window.addEventListener('scroll', function() {
+      const scrollTopBtn = document.querySelector('.scroll-top');
+      if (window.scrollY > 500) {
+        scrollTopBtn.classList.add('visible');
+      } else {
+        scrollTopBtn.classList.remove('visible');
+      }
+    });
+
+    // Section fade-in animation
+    const sections = document.querySelectorAll('section');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.3
+    });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+    
+    // Logistic Regression Model Implementation
+    class LogisticRegression {
+      constructor(coefficients, intercept) {
+        this.coefficients = coefficients;
+        this.intercept = intercept;
+      }
+      
+      predictProba(features) {
+        let linear = this.intercept;
+        for (let i = 0; i < features.length; i++) {
+          linear += features[i] * this.coefficients[i];
+        }
+        const probability = 1 / (1 + Math.exp(-linear));
+        return probability;
+      }
+      
+      predict(features, threshold = 0.5) {
+        const probability = this.predictProba(features);
+        return probability >= threshold ? 'Hemorrhagic' : 'Ischemic';
+      }
+    }
+    
+    // Model parameters
+    const coefficients = [
+      -0.85,   // consciousness
+      0.12,    // sex (male)
+      0.03,    // age
+      0.65,    // atrial fibrillation
+      0.01,    // blood pressure
+      0.92,    // face deficit
+      0.78,    // arm/hand deficit
+      0.81,    // leg/foot deficit
+      0.45,    // dysphasia
+      0.31,    // hemianopia
+      0.28,    // visuospatial disorder
+      0.67     // brainstem/cerebellar signs
+    ];
+    
+    const intercept = -2.35;
+    
+    // Initialize the model
+    const strokeModel = new LogisticRegression(coefficients, intercept);
+    
+    // Prediction function
+    function predictStroke() {
+      // Collect form values
+      const consciousness = parseInt(document.getElementById('consciousness').value);
+      const sex = parseInt(document.getElementById('sex').value);
+      const age = parseInt(document.getElementById('age').value);
+      const atrialFibrillation = parseInt(document.getElementById('atrialFibrillation').value);
+      const bloodPressure = parseInt(document.getElementById('bloodPressure').value);
+      const faceDeficit = parseInt(document.getElementById('faceDeficit').value);
+      const armDeficit = parseInt(document.getElementById('armDeficit').value);
+      const legDeficit = parseInt(document.getElementById('legDeficit').value);
+      const dysphasia = parseInt(document.getElementById('dysphasia').value);
+      const hemianopia = parseInt(document.getElementById('hemianopia').value);
+      const visuospatial = parseInt(document.getElementById('visuospatial').value);
+      const brainstemSigns = parseInt(document.getElementById('brainstemSigns').value);
+      
+      // Validate all fields are filled
+      if (isNaN(consciousness) || isNaN(sex) || isNaN(age) || isNaN(atrialFibrillation) || 
+          isNaN(bloodPressure) || isNaN(faceDeficit) || isNaN(armDeficit) || isNaN(legDeficit) || 
+          isNaN(dysphasia) || isNaN(hemianopia) || isNaN(visuospatial) || isNaN(brainstemSigns)) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      // Create feature array
+      const features = [
+        consciousness,
+        sex,
+        age,
+        atrialFibrillation,
+        bloodPressure,
+        faceDeficit,
+        armDeficit,
+        legDeficit,
+        dysphasia,
+        hemianopia,
+        visuospatial,
+        brainstemSigns
+      ];
+      
+      // Make prediction
+      const prediction = strokeModel.predict(features);
+      const probability = strokeModel.predictProba(features);
+      const confidence = Math.round(probability * 100);
+      
+      // Display results
+      const resultContainer = document.getElementById('resultContainer');
+      const resultValue = document.getElementById('resultValue');
+      const probabilityElement = document.getElementById('probability');
+      
+      resultValue.textContent = prediction;
+      probabilityElement.textContent = `Probability: ${confidence}%`;
+      
+      // Style based on prediction
+      resultContainer.style.display = 'block';
+      resultContainer.className = prediction === 'Ischemic' ? 
+        'result-container ischemic' : 'result-container hemorrhagic';
+      
+      // Scroll to results
+      resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    // Initialize form with sample data for demonstration
+    function initializeSampleData() {
+      document.getElementById('consciousness').value = '0'; // Alert
+      document.getElementById('sex').value = '1'; // Male
+      document.getElementById('age').value = '68';
+      document.getElementById('atrialFibrillation').value = '1'; // Yes
+      document.getElementById('bloodPressure').value = '185';
+      document.getElementById('faceDeficit').value = '1'; // Yes
+      document.getElementById('armDeficit').value = '1'; // Yes
+      document.getElementById('legDeficit').value = '1'; // Yes
+      document.getElementById('dysphasia').value = '0'; // No
+      document.getElementById('hemianopia').value = '0'; // No
+      document.getElementById('visuospatial').value = '0'; // No
+      document.getElementById('brainstemSigns').value = '0'; // No
+    }
+    
+    // Initialize with sample data when page loads
+    window.onload = function() {
+      initializeSampleData();
+      
+      // Add smooth scrolling for all nav links
+      document.querySelectorAll('.nav-link').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          document.querySelector(targetId).scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'center'
+          });
+        });
+      });
+    };
+  </script>
+</body>
 </html>
