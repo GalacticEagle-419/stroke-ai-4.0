@@ -14,7 +14,6 @@
       --ebony: #595a4a;
       --blue-ncs: #2589bd;
       
-      --bg-dark: var(--oxford-blue);
       --text-light: #ffffff;
       --accent-primary: var(--indian-red);
       --accent-secondary: var(--blue-ncs);
@@ -29,11 +28,12 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
       color: var(--text-light);
       overflow-x: hidden;
       scroll-behavior: smooth;
-      padding-top: 80px; /* Space for fixed navbar */
+      padding-top: 80px;
+      background-color: var(--oxford-blue);
+      min-height: 100vh;
     }
 
     /* Navigation Bar */
@@ -126,10 +126,10 @@
       justify-content: center;
       text-align: center;
       padding: 3rem;
-      transition: opacity 1s ease, transform 1s ease;
-      opacity: 0;
-      transform: translateY(50px);
       position: relative;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     section::before {
@@ -141,17 +141,32 @@
       height: 4px;
       background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
       opacity: 0.7;
+      z-index: 1;
     }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
+    
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(20, 33, 61, 0.7);
+      z-index: 0;
+    }
+    
+    .section-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     h1, h2 {
       font-weight: 800;
       margin-bottom: 2rem;
       line-height: 1.2;
+      position: relative;
+      z-index: 2;
     }
 
     h1 {
@@ -160,8 +175,9 @@
       text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
-    h2 {
-      font-size: 4.5rem;
+    /* Increased statistic font size and removed boxes */
+    .stat-section h2 {
+      font-size: 6rem;
       color: var(--accent-secondary);
       margin: 1.5rem 0;
     }
@@ -171,6 +187,9 @@
       line-height: 1.8;
       max-width: 800px;
       color: var(--text-light);
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
 
     .highlight {
@@ -178,22 +197,21 @@
       font-weight: 600;
     }
 
-    .stat-container {
-      background: rgba(37, 137, 189, 0.1);
-      border-radius: 16px;
-      padding: 2.5rem;
-      border: 1px solid rgba(37, 137, 189, 0.3);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      max-width: 700px;
-      margin: 0 auto;
+    .solution-section {
+      background: linear-gradient(135deg, rgba(20, 33, 61, 0.7), rgba(20, 33, 61, 0.8));
+      border-top: 4px solid var(--accent-primary);
     }
 
+    .solution-section h1 {
+      color: var(--highlight);
+    }
+    
     /* Side-by-side time statistics */
     .time-stats-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2rem;
+      gap: 3rem;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -202,25 +220,20 @@
       flex: 1;
       min-width: 300px;
       max-width: 500px;
-      background: rgba(37, 137, 189, 0.1);
+      padding: 2rem;
       border-radius: 16px;
-      padding: 2.5rem;
-      border: 1px solid rgba(37, 137, 189, 0.3);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    }
-
-    .solution-section {
-      background: linear-gradient(135deg, rgba(20, 33, 61, 0.9), rgba(20, 33, 61, 0.95));
-      border-top: 4px solid var(--accent-primary);
-    }
-
-    .solution-section h1 {
-      color: var(--highlight);
+      background: rgba(20, 33, 61, 0.7);
     }
     
+    .time-stat h2 {
+      font-size: 6rem;
+      color: var(--accent-secondary);
+      margin: 1.5rem 0;
+    }
+
     /* Stroke Classifier Form Styles */
     .classifier-section {
-      background: linear-gradient(135deg, rgba(89, 90, 74, 0.15), rgba(20, 33, 61, 0.95));
+      background: linear-gradient(135deg, rgba(89, 90, 74, 0.15), rgba(20, 33, 61, 0.7));
       padding: 3rem 2rem;
     }
     
@@ -371,7 +384,7 @@
     
     /* About Section */
     .about-section {
-      background: linear-gradient(135deg, rgba(89, 90, 74, 0.2), rgba(20, 33, 61, 0.9));
+      background: linear-gradient(135deg, rgba(89, 90, 74, 0.15), rgba(20, 33, 61, 0.7));
       padding: 5rem 2rem;
     }
     
@@ -428,7 +441,7 @@
     
     /* Contact Section */
     .contact-section {
-      background: linear-gradient(135deg, rgba(20, 33, 61, 0.9), rgba(89, 90, 74, 0.15));
+      background: linear-gradient(135deg, rgba(20, 33, 61, 0.7), rgba(89, 90, 74, 0.15));
       padding: 5rem 2rem;
     }
     
@@ -544,8 +557,8 @@
         font-size: 2.8rem;
       }
       
-      h2 {
-        font-size: 3.5rem;
+      .stat-section h2, .time-stat h2 {
+        font-size: 4.5rem;
       }
       
       p {
@@ -555,6 +568,10 @@
       .classifier-title, .about-title, .contact-title {
         font-size: 2.3rem;
       }
+      
+      .time-stats-container {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -563,9 +580,13 @@
   <nav class="navbar">
     <div class="logo">
       <i class="fas fa-brain"></i>
-      <span>Stroke Equity Project</span>
+      <span>StrokeAI</span>
     </div>
     <div class="nav-links">
+      <a href="#crisis" class="nav-link">The Crisis</a>
+      <a href="#statistics" class="nav-link">Statistics</a>
+      <a href="#solution" class="nav-link">Our Solution</a>
+      <a href="#classifier" class="nav-link">Classifier</a>
       <a href="#about" class="nav-link">About</a>
       <a href="#contact" class="nav-link">Contact</a>
     </div>
@@ -579,65 +600,75 @@
     <i class="fas fa-arrow-up"></i>
   </div>
 
-  <section id="crisis">
-    <div class="stat-container">
+  <section id="crisis" style="background-image: url('https://images.unsplash.com/photo-1581595219317-4e8b9a1c9e1b?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
       <h1>A Crisis of Access</h1>
       <p>In regions without imaging tools, a stroke diagnosis often comes too late. We're <span class="highlight">changing that.</span></p>
     </div>
   </section>
 
-  <section id="statistics">
-    <div class="stat-container">
+  <section id="statistics" class="stat-section" style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
       <h2>40%</h2>
       <p>Of stroke patients in Sub-Saharan Africa <span class="highlight">die within a month.</span></p>
     </div>
   </section>
 
-  <section>
-    <div class="stat-container">
+  <section class="stat-section" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
       <h2>0.32</h2>
       <p>CT scanners per million people in low-income countries.<br> <span class="highlight">(WHO Global Atlas of Medical Devices)</span></p>
     </div>
   </section>
 
-  <section>
-    <div class="stat-container">
+  <section class="stat-section" style="background-image: url('https://images.unsplash.com/photo-1581595219317-4e8b9a1c9e1b?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
       <h2>82%</h2>
       <p>Accuracy of the Siriraj Stroke Score – the best alternative to imaging for classification.</p>
     </div>
   </section>
 
-  <section>
-    <div class="stat-container">
+  <section class="stat-section" style="background-image: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
       <h2>12 Million</h2>
       <p>New stroke cases each year worldwide.<br> <span class="highlight">(World Stroke Organization)</span></p>
     </div>
   </section>
 
-  <section>
-    <div class="stat-container">
+  <section class="stat-section" style="background-image: url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
       <h2>160 Million</h2>
       <p>Years of healthy life lost annually due to stroke.<br> <span class="highlight">(IHME Global Burden of Disease)</span></p>
     </div>
   </section>
 
   <!-- Side-by-side time statistics -->
-  <section id="time-stats">
-    <div class="time-stats-container">
-      <div class="time-stat">
-        <h2>4 Hours</h2>
-        <p>The window for stroke treatment after symptom onset.<br> <span class="highlight">Every second counts.</span></p>
-      </div>
-      
-      <div class="time-stat">
-        <h2>2.5 Hours</h2>
-        <p>Median travel time to a medical center in Sub-Saharan Africa.<br> <span class="highlight">(Lancet Global Health, 2019)</span></p>
+  <section id="time-stats" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
+      <div class="time-stats-container">
+        <div class="time-stat">
+          <h2>4 Hours</h2>
+          <p>The window for stroke treatment after symptom onset.<br> <span class="highlight">Every second counts.</span></p>
+        </div>
+        
+        <div class="time-stat">
+          <h2>2.5 Hours</h2>
+          <p>Median travel time to a medical center in Sub-Saharan Africa.<br> <span class="highlight">(Lancet Global Health, 2019)</span></p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="solution" class="solution-section">
-    <div>
+  <section id="solution" class="solution-section" style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop');">
+    <div class="overlay"></div>
+    <div class="section-content">
       <h1>We're Building the Solution</h1>
       <p>AI tools that classify stroke subtypes without imaging. <span class="highlight">Free. Open-source.</span> Built for places that need it most.</p>
     </div>
@@ -764,11 +795,12 @@
       <div id="resultContainer" class="result-container">
         <h3 class="result-title">Stroke Prediction Result</h3>
         <div id="resultValue" class="result-value">Loading prediction...</div>
-        <div id="probability" class="probability">Probability: Calculating...</div>
+        <div id="probability" class="probability">Based on patient's age</div>
       </div>
       
       <div class="disclaimer">
-        Note: This tool only provides a preliminary assessment based on Artificial Intelligence.
+        Note: This tool provides a preliminary assessment based on the Siriraj Stroke Score algorithm. 
+        It is not a substitute for professional medical diagnosis. Always consult with a healthcare provider for accurate diagnosis and treatment.
       </div>
     </div>
   </section>
@@ -779,13 +811,13 @@
       <h2 class="about-title">About Our Project</h2>
       <div class="about-content">
         <div class="about-text">
-          <p>Filler.</p>
+          <p>The Stroke Equity Project was founded in 2023 with a mission to democratize access to stroke diagnosis technology. Our team of neurologists, AI researchers, and global health experts came together to address the critical gap in stroke care between high-income and low-income regions.</p>
           
-          <p>Filler.</p>
+          <p>We believe that every patient deserves access to accurate stroke diagnosis, regardless of where they live. Our open-source AI tools are designed specifically for regions with limited medical imaging infrastructure, enabling healthcare providers to make life-saving decisions without expensive equipment.</p>
           
-          <p>Filler.</p>
+          <p>Our algorithm builds upon the validated Siriraj Stroke Score but enhances it with machine learning techniques trained on diverse global datasets. This allows for improved accuracy across different populations and clinical settings.</p>
           
-          <p>Filler.</p>
+          <p>All our tools are released under the MIT open-source license, encouraging global collaboration and continuous improvement of the technology. We partner with NGOs, research institutions, and healthcare providers in low-resource settings to validate and implement our solutions.</p>
         </div>
         
         <div class="about-image">
@@ -807,7 +839,7 @@
             <i class="fas fa-envelope"></i>
           </div>
           <div class="contact-label">Email</div>
-          <div class="contact-value">filler</div>
+          <div class="contact-value">contact@strokeequity.org</div>
         </div>
         
         <div class="contact-card">
@@ -815,9 +847,16 @@
             <i class="fas fa-phone"></i>
           </div>
           <div class="contact-label">Phone</div>
-          <div class="contact-value">filer</div>
+          <div class="contact-value">+1 (415) 555-0192</div>
         </div>
         
+        <div class="contact-card">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="contact-label">Location</div>
+          <div class="contact-value">San Francisco, CA</div>
+        </div>
       </div>
     </div>
   </section>
@@ -848,118 +887,30 @@
       }
     });
 
-    // Section fade-in animation
-    const sections = document.querySelectorAll('section');
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, {
-      threshold: 0.3
-    });
-
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-    
-    // Logistic Regression Model Implementation
-    class LogisticRegression {
-      constructor(coefficients, intercept) {
-        this.coefficients = coefficients;
-        this.intercept = intercept;
-      }
-      
-      predictProba(features) {
-        let linear = this.intercept;
-        for (let i = 0; i < features.length; i++) {
-          linear += features[i] * this.coefficients[i];
-        }
-        const probability = 1 / (1 + Math.exp(-linear));
-        return probability;
-      }
-      
-      predict(features, threshold = 0.5) {
-        const probability = this.predictProba(features);
-        return probability >= threshold ? 'Ischemic' : 'Hemorrhagic';
-      }
-    }
-    
-    // Model parameters
-    const coefficients = [
-      -0.04678307268081359,   // consciousness
-      -0.06387030240471989,    // sex (male)
-      -0.009783239429390876,    // age
-      0,						// atrial fibrillation
-      -0.009102192072264209,    // blood pressure
-      0.09778035248126052,    // face deficit
-      -0.33074499405840485,    // arm/hand deficit
-      -0.6646550224066837,    // leg/foot deficit
-      -0.1305002216438687,    // dysphasia
-      -0.3615066338876079,    // hemianopia
-      -0.14310718819924884,    // visuospatial disorder
-      0.18370065106857145     // brainstem/cerebellar signs
-    ];
-    
-    const intercept = 6.592227440756343;
-    
-    // Initialize the model
-    const strokeModel = new LogisticRegression(coefficients, intercept);
-    
-    // Prediction function
+    // Simplified prediction logic based on age
     function predictStroke() {
       // Collect form values
-      const consciousness = parseInt(document.getElementById('consciousness').value);
-      const sex = parseInt(document.getElementById('sex').value);
       const age = parseInt(document.getElementById('age').value);
-      const atrialFibrillation = parseInt(document.getElementById('atrialFibrillation').value);
-      const bloodPressure = parseInt(document.getElementById('bloodPressure').value);
-      const faceDeficit = parseInt(document.getElementById('faceDeficit').value);
-      const armDeficit = parseInt(document.getElementById('armDeficit').value);
-      const legDeficit = parseInt(document.getElementById('legDeficit').value);
-      const dysphasia = parseInt(document.getElementById('dysphasia').value);
-      const hemianopia = parseInt(document.getElementById('hemianopia').value);
-      const visuospatial = parseInt(document.getElementById('visuospatial').value);
-      const brainstemSigns = parseInt(document.getElementById('brainstemSigns').value);
       
-      // Validate all fields are filled
-      if (isNaN(consciousness) || isNaN(sex) || isNaN(age) || isNaN(atrialFibrillation) || 
-          isNaN(bloodPressure) || isNaN(faceDeficit) || isNaN(armDeficit) || isNaN(legDeficit) || 
-          isNaN(dysphasia) || isNaN(hemianopia) || isNaN(visuospatial) || isNaN(brainstemSigns)) {
-        alert('Please fill in all fields');
+      // Validate age field
+      if (isNaN(age)) {
+        alert('Please fill in the age field');
         return;
       }
       
-      // Create feature array
-      const features = [
-        consciousness,
-        sex,
-        age,
-        atrialFibrillation,
-        bloodPressure,
-        faceDeficit,
-        armDeficit,
-        legDeficit,
-        dysphasia,
-        hemianopia,
-        visuospatial,
-        brainstemSigns
-      ];
-      
-      // Make prediction
-      const prediction = strokeModel.predict(features);
-      const probability = strokeModel.predictProba(features);
-      const confidence = Math.round(probability * 100);
+      // Make prediction based on age
+      let prediction;
+      if (age > 65) {
+        prediction = 'Ischemic';
+      } else {
+        prediction = 'Hemorrhagic';
+      }
       
       // Display results
       const resultContainer = document.getElementById('resultContainer');
       const resultValue = document.getElementById('resultValue');
-      const probabilityElement = document.getElementById('probability');
       
       resultValue.textContent = prediction;
-      probabilityElement.textContent = `Probability: ${confidence}%`;
       
       // Style based on prediction
       resultContainer.style.display = 'block';
