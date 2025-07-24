@@ -768,8 +768,7 @@
       </div>
       
       <div class="disclaimer">
-        Note: This tool provides a preliminary assessment based on the Siriraj Stroke Score algorithm. 
-        It is not a substitute for professional medical diagnosis. Always consult with a healthcare provider for accurate diagnosis and treatment.
+        Note: This tool only provides a preliminary assessment based on Artificial Intelligence.
       </div>
     </div>
   </section>
@@ -884,27 +883,27 @@
       
       predict(features, threshold = 0.5) {
         const probability = this.predictProba(features);
-        return probability >= threshold ? 'Hemorrhagic' : 'Ischemic';
+        return probability >= threshold ? 'Ischemic' : 'Hemorrhagic';
       }
     }
     
     // Model parameters
     const coefficients = [
-      -0.85,   // consciousness
-      0.12,    // sex (male)
-      0.03,    // age
-      -0.65,    // atrial fibrillation
-      0.01,    // blood pressure
-      0.92,    // face deficit
-      -0.78,    // arm/hand deficit
-      0.81,    // leg/foot deficit
-      0.45,    // dysphasia
-      -0.31,    // hemianopia
-      0.28,    // visuospatial disorder
-      0.67     // brainstem/cerebellar signs
+      -0.04678307268081359,   // consciousness
+      -0.06387030240471989,    // sex (male)
+      -0.009783239429390876,    // age
+      0,						// atrial fibrillation
+      -0.009102192072264209,    // blood pressure
+      0.09778035248126052,    // face deficit
+      -0.33074499405840485,    // arm/hand deficit
+      -0.6646550224066837,    // leg/foot deficit
+      -0.1305002216438687,    // dysphasia
+      -0.3615066338876079,    // hemianopia
+      -0.14310718819924884,    // visuospatial disorder
+      0.18370065106857145     // brainstem/cerebellar signs
     ];
     
-    const intercept = -2.35;
+    const intercept = 6.592227440756343;
     
     // Initialize the model
     const strokeModel = new LogisticRegression(coefficients, intercept);
